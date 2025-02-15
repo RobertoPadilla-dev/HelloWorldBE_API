@@ -1,0 +1,21 @@
+# Visual Studio
+.vs/
+.vscode/
+.idea/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Node.js
+node_modules/
+
+# .NET build files
+bin/
+obj/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
