@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HelloWorldBE_API.Data;
+using HelloWorldBE_API.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading.Tasks;
 
 namespace HelloWorldBE_API.Controllers
 {
@@ -7,14 +11,36 @@ namespace HelloWorldBE_API.Controllers
     [Route("api/[controller]")]
     public class HelloWorldController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetMensaje()
+        private readonly ApplicationDb _context;
+
+        public HelloWorldController(ApplicationDb context)
         {
-            var mensaje = new
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMensaje()
+        {
+            var mensaje = await _context.Mensajes.OrderByDescending(m => m.FechaHora).FirstOrDefaultAsync();
+
+            if (mensaje == null)
             {
-                texto = "Hola Mundo",
-                fechaHora = DateTime.Now 
-            };
+                mensaje = new Mensaje
+                {
+                    Texto = "Hola Mundo",
+                    FechaHora = DateTime.Now
+                };
+
+                _context.Mensajes.Add(mensaje);
+            }
+            else
+            {
+                // Si ya existe, solo actualiza la fecha
+                mensaje.FechaHora = DateTime.Now;
+                _context.Mensajes.Update(mensaje);
+            }
+
+            await _context.SaveChangesAsync(); // Guarda en la base de datos
 
             return Ok(mensaje);
         }
