@@ -25,7 +25,7 @@ namespace HelloWorldBE_API.Controllers
 
             if (mensaje == null)
             {
-                mensaje = new Mensaje
+                mensaje = new Mensaje //Realiza el primer insert
                 {
                     Texto = "Hola Mundo",
                     FechaHora = DateTime.Now
@@ -35,12 +35,12 @@ namespace HelloWorldBE_API.Controllers
             }
             else
             {
-                // Si ya existe, solo actualiza la fecha
+                //Actualiza
                 mensaje.FechaHora = DateTime.Now;
                 _context.Mensajes.Update(mensaje);
             }
 
-            await _context.SaveChangesAsync(); // Guarda en la base de datos
+            await _context.SaveChangesAsync();
 
             return Ok(mensaje);
         }
